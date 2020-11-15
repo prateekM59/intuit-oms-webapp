@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import Home from './Home';
 import Profile from './Profile';
-import R2 from './R2';
+import Orders from './Orders';
+import CreateOrder from './CreateOrder';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
 
@@ -14,7 +15,8 @@ const routing = (
         <div>
             <Route exact path="/" component={Home}/>
             <Route exact path="/profile" component={Profile}/>
-            <Route exact path="/orders" component={R2} />
+            <Route exact path="/orders" component={Orders} />
+            <Route exact path="/orders/create" component={CreateOrder} />
         </div>
     </Router>
 );

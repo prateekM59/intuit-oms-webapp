@@ -41,7 +41,7 @@ class Home extends React.Component {
                             'href': '/orders'
                         },
                         {
-                            'title': 'Create Order',
+                            'title': 'Create Orders',
                             'href': '/orders/create'
                         }
                     ],

@@ -11,15 +11,15 @@ class Sidebar extends React.Component {
     render() {
         let itemList = [];
 
-        this.props.content.forEach((item)=>{
+        this.props.content.forEach((item, index)=>{
             if (item.href) {
-                itemList.push(<a className="font-weight-bold" href={item.href}>{item.title}</a>);
+                itemList.push(<a className="font-weight-bold" key={index} href={item.href}>{item.title}</a>);
             } else {
-                itemList.push(<section className="font-weight-bold">{item.title}</section>);
+                itemList.push(<section className="font-weight-bold" key={index}>{item.title}</section>);
             }
 
-            item.subitems.forEach((subItem)=>{
-                itemList.push(<a className="pl-4" href={subItem.href}>{subItem.title}</a>);
+            item.subitems.forEach((subItem, subIndex)=>{
+                itemList.push(<a className="pl-4" href={subItem.href} key={subIndex}>{subItem.title}</a>);
             });
         });
 
