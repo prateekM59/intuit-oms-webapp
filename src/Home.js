@@ -1,50 +1,55 @@
-import './App.css';
+import './Home.css';
 import React from "react";
 import Sidebar from "./Sidebar";
 
-const Home = (props) => {
-    return (
-        <div className="App" id="outer-container">
-            <Sidebar pageWrapId={'page-wrap'} outerContainerId={'outer-container'} content={getContent()} />
-            <div id="page-wrap">
-                <h1>Order Management System</h1>
-                <h4>Open sidebar for options!</h4>
+class Home extends React.Component {
+    render() {
+        let title = this.props.pageTitle || "Select from menu";
+        return (
+            <div className="text-center" id="outer-container">
+                <Sidebar pageWrapId={'page-wrap'} outerContainerId={'outer-container'} content={getContent()} />
+                <div id="page-wrap">
+                    <h1>Order Management System</h1>
+                    <h4>{title}</h4>
+                </div>
             </div>
-        </div>
-    );
+        );
 
-    function getContent() {
-        return [
-            {
-                'title': 'Profiles',
-                'subitems': [
-                    {
-                        'title': 'My Profiles',
-                        'href': '/myprofile'
-                    },
-                    {
-                        'title': 'All Profiles',
-                        'href': '/allprofiles'
-                    }
-                ],
-                'href': '/profiles'
-            },
-            {
-                'title': 'Orders',
-                'subitems': [
-                    {
-                        'title': 'My Orders',
-                        'href': '/myorders'
-                    },
-                    {
-                        'title': 'All Orders',
-                        'href': '/allorders'
-                    }
-                ],
-                'href': '/orders'
-            }
-        ];
+        function getContent() {
+            return [
+                {
+                    'title': 'Home',
+                    'subitems': [
+                    ],
+                    'href': '/'
+                },
+                {
+                    'title': 'Profiles',
+                    'subitems': [
+                        {
+                            'title': 'My Profile',
+                            'href': '/profile'
+                        }
+                    ],
+                    'href': ''
+                },
+                {
+                    'title': 'Orders',
+                    'subitems': [
+                        {
+                            'title': 'My Orders',
+                            'href': '/orders'
+                        },
+                        {
+                            'title': 'Create Order',
+                            'href': '/orders/create'
+                        }
+                    ],
+                    'href': ''
+                }
+            ];
+        }
     }
-};
+}
 
 export default Home;
