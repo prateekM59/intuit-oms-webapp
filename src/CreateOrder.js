@@ -1,96 +1,122 @@
 import React from 'react';
 import Home from './Home';
-import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
+import {Button, Form, FormGroup, Label, FormFeedback, Input} from 'reactstrap';
 
 class CreateOrder extends React.Component {
 
     constructor(props) {
         super(props);
-        this.handleChange = this.handleChange.bind(this);
+        this.handleProductChange = this.handleProductChange.bind(this);
+        this.handleQuantityChange = this.handleQuantityChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.state = {
-            user: {
-                id: window.oms.userId,
-                name: '',
-                address: '',
-                phone: '',
-                email: ''
+            productIndex: -1,
+            quantity: 0
+        };
+        this.url = '/orders/';
+
+        // hardcoded for now, should be fetched from service on selection
+        this.productToPriceMap = [
+            {
+                'name': 'CHAIR',
+                'price': 100.00
             },
-            changed: false
-        };
-        this.url = '/orders/'+ this.state.user.id;
+            {
+                'name': 'TABLE',
+                'price': 1000.50
+            }, {
+                'name': 'SOFA',
+                'price': 500.30
+            }
+        ]
+
     }
 
-    componentDidMount() {
-        fetch(this.url)
-            .then(response => response.json())
-            .then(data => this.setState({user: data, changed: false}));
-    }
-
-    handleChange(event) {
-        const target = event.target;
-        const value = target.value;
-        const name = target.name;
-        let user = this.state.user;
-        user[name] = value;
-        let newState = {
-            'user': user,
-            'changed': true
-        };
+    handleQuantityChange(event) {
+        let newState = this.state;
+        newState['quantity'] = event.target.value;
         this.setState(newState);
+    }
 
+    handleProductChange(event) {
+        let newState = this.state;
+        newState['productIndex'] = parseInt(event.target.value);
+        this.setState(newState);
+    }
+
+    price() {
+        let productIndex = this.state.productIndex;
+        if (productIndex >= 0) {
+            return this.productToPriceMap[productIndex].price * this.state.quantity;
+        }
+        return 0;
     }
 
     handleSubmit(event) {
         event.preventDefault();
         let that = this;
+        let postBody = {
+            'product': this.productToPriceMap[this.state.productIndex].name,
+            'quantity': parseInt(this.state.quantity),
+            'userId': window.oms.userId
+        };
 
         fetch(this.url, {
-            method:  'PUT',
+            method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(this.state.user),
+            body: JSON.stringify(postBody),
         })
-            .then(function(response) {
+            .then(function (response) {
                 if (!response.ok) {
                     throw Error(response.statusText);
                 }
-                window.alert("Update Success!")
+                window.alert("Order Success!")
             })
-            .catch(error=>window.alert("Error in update!"))
+            .catch(error => window.alert("Error in order!"))
             .finally(function () {
-                let user = that.state.user;
-                that.setState({user: user, changed: false});
+                that.setState({
+                    productIndex: -1,
+                    quantity: 0
+                });
             })
     }
 
     render() {
-        let user = this.state.user;
+        let price = this.price();
+        let quantityInvalid = this.state.quantity < 0;
+        let validProductNotSelected = this.state.productIndex < 0;
+        let orderEnabled =  !validProductNotSelected && !quantityInvalid;
 
         return (
-
             <div>
                 <Home pageTitle="Create Order"/>
                 <div className="p-3 border m-3">
                     <Form onSubmit={this.handleSubmit}>
                         <FormGroup>
-                            <Label for="email">Email</Label>
-                            <Input type="text" id="email" name="email" disabled value={user.email} />
+                            <Label for="product">Select Product</Label>
+                            <Input type="select" name="product" id="product" onChange={this.handleProductChange}>
+                                <option selected={validProductNotSelected} value="-1">SELECT PRODUCT</option>
+                                <option value="0">CHAIR</option>
+                                <option value="1">TABLE</option>
+                                <option value="2">SOFA</option>
+                            </Input>
                         </FormGroup>
 
                         <FormGroup>
-                            <Label for="address">Address</Label>
-                            <Input type="text" id="address" name="address" onChange={this.handleChange} value={user.address} />
+                            <Label for="quantity">Quantity</Label>
+                            <Input invalid={quantityInvalid} type="number" id="quantity" name="quantity" value={this.state.quantity} onChange={this.handleQuantityChange}/>
+                            <FormFeedback>Quantity should be more than 0</FormFeedback>
                         </FormGroup>
 
                         <FormGroup>
-                            <Label for="phone">Phone</Label>
-                            <Input type="text" id="phone" name="phone" onChange={this.handleChange} value={user.phone} />
+                            <Label for="price">Total Price</Label>
+                            <Input type="text" id="price" name="price" disabled value={price}/>
                         </FormGroup>
 
-                        <Button disabled={!this.state.changed}>Update</Button>
+                        <Button disabled={!orderEnabled}>Order</Button>
                     </Form>
                 </div>
             </div>

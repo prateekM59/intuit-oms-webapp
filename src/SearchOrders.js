@@ -17,11 +17,9 @@ class SearchOrders extends React.Component {
                 phone: '',
                 email: ''
             },
-            searchResult: [],
-            changed: false
+            searchResult: []
         };
     }
-
 
     handleChange(event) {
         const target = event.target;
@@ -31,7 +29,7 @@ class SearchOrders extends React.Component {
         searchCriteria[name] = value;
         let newState = {
             'searchCriteria': searchCriteria,
-            'changed': true
+            'searchResult': []
         };
         this.setState(newState);
 
@@ -82,7 +80,7 @@ class SearchOrders extends React.Component {
                             </Input>
                         </FormGroup>
 
-                        <Button disabled={!this.state.changed}>Search</Button>
+                        <Button>Search</Button>
                     </Form>
                 </div>
 
