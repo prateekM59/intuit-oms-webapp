@@ -1,6 +1,7 @@
 import React from 'react';
 import './Sidebar.css';
 import {slide as Menu} from 'react-burger-menu';
+import {Link} from "react-router-dom";
 
 class Sidebar extends React.Component {
 
@@ -17,13 +18,13 @@ class Sidebar extends React.Component {
 
         this.props.content.forEach((item, index)=>{
             if (item.href) {
-                itemList.push(<a className="font-weight-bold" key={index} href={item.href}>{item.title}</a>);
+                itemList.push(<Link className="font-weight-bold" key={index} to={item.href}>{item.title}</Link>);
             } else {
                 itemList.push(<section className="font-weight-bold" key={index}>{item.title}</section>);
             }
 
             item.subitems.forEach((subItem, subIndex)=>{
-                itemList.push(<a className="pl-4" href={subItem.href} key={subIndex}>{subItem.title}</a>);
+                itemList.push(<Link className="pl-4" to={subItem.href} key={subIndex}>{subItem.title}</Link>);
             });
         });
 
