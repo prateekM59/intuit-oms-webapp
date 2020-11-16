@@ -11,7 +11,7 @@ class SearchOrders extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.state = {
             searchCriteria: {
-                userId: window.oms.userId,
+                userId: -1,
                 product: '',
                 dateSearchType: 0,
                 phone: '',
@@ -19,6 +19,17 @@ class SearchOrders extends React.Component {
             },
             searchResult: []
         };
+    }
+
+    componentDidMount() {
+        let that = this;
+        fetch('/users/active')
+            .then(response => response.json())
+            .then(function (data) {
+                let state = that.state;
+                state.searchCriteria.userId = data.id;
+                that.setState(state);
+            });
     }
 
     handleChange(event) {

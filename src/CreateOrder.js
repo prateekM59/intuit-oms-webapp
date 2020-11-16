@@ -14,6 +14,7 @@ class CreateOrder extends React.Component {
             quantity: 0
         };
         this.url = '/orders/';
+        this.userId = -1;
 
         // hardcoded for now, should be fetched from service on selection
         this.productToPriceMap = [
@@ -30,6 +31,20 @@ class CreateOrder extends React.Component {
             }
         ]
 
+    }
+
+    componentDidMount() {
+        let that = this;
+        fetch('/users/active')
+            .then(function (response) {
+                if (!response.ok) {
+                    window.location.href = "/";
+                }
+                return response.json();
+            })
+            .then(function (data) {
+                that.userId = data.id;
+            });
     }
 
     handleQuantityChange(event) {
@@ -58,7 +73,7 @@ class CreateOrder extends React.Component {
         let postBody = {
             'product': this.productToPriceMap[this.state.productIndex].name,
             'quantity': parseInt(this.state.quantity),
-            'userId': window.oms.userId
+            'userId': this.userId
         };
 
         fetch(this.url, {

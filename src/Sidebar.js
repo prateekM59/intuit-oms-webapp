@@ -9,6 +9,10 @@ class Sidebar extends React.Component {
     }
 
     render() {
+        if (this.props.disabled) {
+            return "";
+        }
+
         let itemList = [];
 
         this.props.content.forEach((item, index)=>{

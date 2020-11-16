@@ -10,7 +10,7 @@ class Profile extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.state = {
             user: {
-                id: window.oms.userId,
+                id: -1,
                 name: '',
                 address: '',
                 phone: '',
@@ -18,12 +18,16 @@ class Profile extends React.Component {
             },
             changed: false
         };
-        this.url = '/users/'+ this.state.user.id;
     }
 
     componentDidMount() {
-        fetch(this.url)
-            .then(response => response.json())
+        fetch('/users/active')
+            .then(function (response) {
+                if (!response.ok) {
+                    window.location.href = "/";
+                }
+                return response.json();
+            })
             .then(data => this.setState({user: data, changed: false}));
     }
 
@@ -45,7 +49,7 @@ class Profile extends React.Component {
         event.preventDefault();
         let that = this;
 
-        fetch(this.url, {
+        fetch('/users/'+this.state.user.id, {
             method:  'PUT',
             headers: {
                 'Accept': 'application/json',

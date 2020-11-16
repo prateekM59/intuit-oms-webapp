@@ -3,11 +3,12 @@ import React from "react";
 import Sidebar from "./Sidebar";
 
 class Home extends React.Component {
+
     render() {
         let title = this.props.pageTitle || "Select from menu";
         return (
             <div className="text-center" id="outer-container">
-                <Sidebar pageWrapId={'page-wrap'} outerContainerId={'outer-container'} content={getContent()} />
+                <Sidebar disabled={this.props.sidebarDisabled} pageWrapId={'page-wrap'} outerContainerId={'outer-container'} content={getContent()} />
                 <div id="page-wrap">
                     <h1>Order Management System</h1>
                     <h4>{title}</h4>
@@ -21,7 +22,7 @@ class Home extends React.Component {
                     'title': 'Home',
                     'subitems': [
                     ],
-                    'href': '/'
+                    'href': '/home'
                 },
                 {
                     'title': 'Profiles',
@@ -42,11 +43,17 @@ class Home extends React.Component {
                         },
                         {
                             'title': 'Create Orders',
-                            'href': '/orders/create'
+                            'href': '/createorders'
                         }
                     ],
                     'href': ''
-                }
+                },
+                {
+                    'title': 'Logout',
+                    'subitems': [
+                    ],
+                    'href': '/logout'
+                },
             ];
         }
     }
